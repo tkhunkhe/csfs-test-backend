@@ -1,0 +1,108 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id    Int     @id @default(autoincrement())
+  username String  @unique
+  createdAt DateTime @default(now())
+  locations UserLocation[]
+  homes Home[]// a user can change an address, 
+  // the new address will be used to calculate the new CP points. 
+  // The old points still use the old address.
+  rankHists RankHistory[]
+}
+
+model UserLocation {
+  id  Int     @id @default(autoincrement())
+  userId Int
+  user  User   @relation(fields: [userId], references: [id])
+  lat Float
+  long Float
+  createdAt DateTime @default(now())
+  uLocDPointsHist ULocDPointsHistory? // a location can match only 1 CP
+}
+
+// A user can only have one home but their old points with old home should not be recalculated based on the new home
+model Home {
+  id  Int     @id @default(autoincrement())
+  userId Int
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  address String
+  lat Float? // allow adding address without knowning the lat-long, but when queried for ranking these should be auto-populated
+  long Float? // same rule as lat
+  createdAt DateTime @default(now())
+  cpDists Distance[]
+}
+
+model CheckPoint {
+  id  Int     @id @default(autoincrement())
+  lat Float
+  long Float
+  createdAt DateTime @default(now())
+  removedAt DateTime?
+  homeDists Distance[] // distance to each user'home
+}
+
+// home to checkpoint one-way distance in km
+// many to many, one for each User-CP pair
+model Distance {
+  id  Int     @id @default(autoincrement())
+  homeId Int
+  cpId Int
+  home Home @relation(fields: [homeId], references: [id])
+  cp CheckPoint @relation(fields: [cpId], references: [id])
+  km Float
+  createdAt DateTime @default(now()) // created when checkpoint or home is created
+  disabledAt DateTime? // not null when user has new home or checkpoint is removed
+  distPoints DistancePoints?
+}
+
+// points for each User-CP pair distance
+// new set of DPs will be added when any Distance is disabled or a new one is created
+// in order to create a fair game
+model DistancePoints { // DP
+  id Int @id @default(autoincrement())
+  distId Int
+  dist Distance @relation(fields: [distId], references: [id])
+  points Int // 1-10
+  createdAt DateTime @default(now())
+  uLocDPointsHist ULocDPointsHistory[] // a User-CP pair distance can be reached many times
+}
+
+// user location distance points history
+model ULocDPointsHistory {
+  id Int @id @default(autoincrement())
+  uLocId Int
+  uLoc UserLocation @relation(fields: [uLocId], references: [id])
+  dPointsId Int
+  dPoints DistancePoints @relation(fields: [dPointsId], references: [id])
+}
+
+// one to many ranks
+// when query ranks for dashboard, just query the latest rank set
+model RankSet {
+  id Int @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  rankHists RankHistory[]
+}
+// total points and rank each time there is a new UserDPHistory
+// a tie has the same rank
+model RankHistory {
+  id Int @id @default(autoincrement())
+  userId Int
+  user User @relation(fields: [userId], references: [id])
+  rank Int
+  totalPoints Int // can be zero if never 
+  createdAt DateTime @default(now())
+  rankSetId Int
+  rankSet RankSet @relation(fields: [rankSetId], references: [id])
+}
