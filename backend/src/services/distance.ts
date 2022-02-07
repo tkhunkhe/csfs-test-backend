@@ -1,5 +1,5 @@
 import checkpointServ from "./checkpoint";
-import homeServ from "./home";
+import userServ from "./user";
 import prisma from "../connectors/prisma-client";
 import latlongUtil from "../utils/latlong-util";
 import { LatLong } from "../interfaces";
@@ -14,17 +14,17 @@ const storeDistances = async (distances) => {
  */
 const calculateCurrentDistances = async () => {
   // query all latest home
-  const homes = await homeServ.getAllUsersLatestHomes();
+  const users = await userServ.getAllUsers();
   const checkpoints = await checkpointServ.getAllCurrentCheckpoints();
   const data = [];
-  homes.forEach((home) => {
-    let latlongH = latlongUtil.getLatLongObj(home.lat, home.long);
+  users.forEach((user) => {
+    let latlongH = latlongUtil.getLatLongObj(user.lat, user.long);
     checkpoints.forEach((cp) => {
       let latlongCP = latlongUtil.getLatLongObj(cp.lat, cp.long);
       let m = distanceAToB(latlongH, latlongCP);
       data.push({
         km: m / 1000,
-        homeId: home.id,
+        userId: user.id,
         cpId: cp.id,
       });
     });
