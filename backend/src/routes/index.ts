@@ -1,7 +1,5 @@
 import express from "express";
 import dashboard from "./dashboard";
-import admin from "./admin";
-import mobile from "./mobile";
 import bodyParser from "body-parser";
 
 const router = express.Router();
@@ -13,7 +11,5 @@ router.get("/", (_, res) =>
     .send("Welcome to Chainstarts Full-stack Test App ** Backend **")
 );
 router.use("dashboard", dashboard);
-router.use("admin", admin);
-router.use("mobile", mobile);
 
 export default router;
