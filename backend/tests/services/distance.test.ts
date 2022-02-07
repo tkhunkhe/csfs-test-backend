@@ -35,3 +35,14 @@ describe("test a to b close by", () => {
     expect(isClose).toBeFalsy();
   });
 });
+
+describe("test get all users distances", () => {
+  let res;
+  beforeAll(async () => {
+    res = await distanceServ.getAllUsersCurrentDistances();
+    console.debug("example", JSON.stringify(res[0]));
+  });
+  it("should exists", () => {
+    expect(res).toBeDefined();
+  });
+});
