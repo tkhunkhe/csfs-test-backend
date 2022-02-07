@@ -4,7 +4,7 @@
 
 ### dev
 
-- `npm run dev`
+- `npm run start`
 
 ### build
 
@@ -12,5 +12,5 @@
 
 ### serve
 
-- `npm run start`
+- `npm run serve`
 - serve the built application
