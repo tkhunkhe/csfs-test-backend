@@ -37,6 +37,31 @@ const calculateAndStoreCurrentDistances = async () => {
   return await storeDistances(data);
 };
 
+/**
+ * include sort distances
+ * @returns
+ */
+const getAllUsersCurrentDistances = () => {
+  return prisma.user.findMany({
+    select: {
+      cpDists: {
+        where: {
+          disabledAt: null,
+        },
+        orderBy: {
+          km: "desc",
+        },
+        select: {
+          id: true,
+          userId: true,
+          cpId: true,
+          km: true,
+        },
+      },
+    },
+  });
+};
+
 export const clostByKMThreshold = 25; // km
 export const acceptableKMOff = 2; // km(2m)
 /**
@@ -84,4 +109,5 @@ export default {
   distanceAToB,
   isACloseToB,
   getCloseByCheckpoints,
+  getAllUsersCurrentDistances,
 };
