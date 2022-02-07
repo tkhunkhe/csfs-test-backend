@@ -1,6 +1,8 @@
 import listUtils from "../utils/list-utils";
 import prisma from "../connectors/prisma-client";
 import distanceServ from "./distance";
+import moment from "../utils/moment-utils";
+import { Moment } from "moment";
 
 const MAX_POINTS = 10;
 /**
@@ -33,11 +35,22 @@ const storePointsSet = (pointsSet) => {
  * @param debug include cpId, km if debug = True
  * @returns
  */
-const calculatePointsForAllUsers = async (debug = false) => {
+const calculatePointsForAllUsers = async (
+  debug = false
+): Promise<{ data: any[]; maxCreatedAt: Moment | String }> => {
   // query current distances for each home (no disabled)
   // distances are sorted desc
   const users = await distanceServ.getAllUsersCurrentDistances();
   let allData = [];
+  const cpDistsCreatedAts = users.reduce(
+    (acc, user) => acc.concat(user.cpDists.map((cpDist) => cpDist.createdAt)),
+    []
+  );
+  const maxCreatedAt = cpDistsCreatedAts.reduce(
+    (max, createdAt) =>
+      moment(createdAt).isSameOrAfter(max) ? createdAt : max,
+    moment().subtract(999, "y")
+  );
   for (let user of users) {
     const cpDistsChunks = listUtils.split(user.cpDists, MAX_POINTS);
     let data = cpDistsChunks.reduce((acc, chunk, i) => {
@@ -54,15 +67,16 @@ const calculatePointsForAllUsers = async (debug = false) => {
     }, []);
     allData = allData.concat(data);
   }
-  return allData;
+  return { data: allData, maxCreatedAt };
 };
 
 /**
  * create pointsSet and points
  */
 const calculateAndStorePointsForAllUsers = async () => {
-  const distPoints = await calculatePointsForAllUsers();
+  const { data: distPoints, maxCreatedAt } = await calculatePointsForAllUsers();
   return storePointsSet({
+    createdAt: maxCreatedAt,
     distPoints,
   });
 };

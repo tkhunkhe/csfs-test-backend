@@ -8,4 +8,10 @@ describe("test calculate points for all users", () => {
   it("should exists", () => {
     expect(res).toBeDefined();
   });
+  it("should have data", () => {
+    expect(res).toHaveProperty("data");
+  });
+  it("should have maxCreatedAt", () => {
+    expect(res).toHaveProperty("maxCreatedAt");
+  });
 });

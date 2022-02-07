@@ -74,8 +74,8 @@ const main = async () => {
   const mocked = await readMocked.read();
   //   console.log(mocked);
   await initUsers(mocked.users);
-  await initUserLocations(mocked.userLocs);
   await initCheckpoints(mocked.checkpoints);
+  await initUserLocations(mocked.userLocs);
   await calDistances();
   await calPoints();
 };

@@ -14,7 +14,7 @@ const NUM_USERS = 10;
 const NUM_LOCS_PER_USER = 6;
 const MAX_NUM_CLOSE_BY_CP_PER_USER = Math.floor(NUM_LOCS_PER_USER / 2);
 const ADD_CPs_TIME = moment("2022-02-08 09:30:00");
-const ADD_Users_TIME = ADD_CPs_TIME.add(30, "m");
+const ADD_Users_TIME = ADD_CPs_TIME.subtract(30, "m");
 const writeToFile = "tests/mocked-data/map-data.json";
 
 const getCheckpointsWithCreatedAt = () => {

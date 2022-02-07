@@ -3,6 +3,7 @@ import userServ from "./user";
 import prisma from "../connectors/prisma-client";
 import latlongUtil from "../utils/latlong-util";
 import { LatLong } from "../interfaces";
+import moment from "../utils/moment-utils";
 
 const storeDistances = async (distances) => {
   return prisma.distance.createMany({
@@ -26,6 +27,10 @@ const calculateCurrentDistances = async () => {
         km: m / 1000,
         userId: user.id,
         cpId: cp.id,
+        // created at of distance should be at the later time of cp or user creation
+        createdAt: moment(cp.createdAt).isSameOrAfter(user.createdAt)
+          ? cp.createdAt
+          : user.createdAt,
       });
     });
   });
@@ -56,6 +61,7 @@ const getAllUsersCurrentDistances = () => {
           userId: true,
           cpId: true,
           km: true,
+          createdAt: true,
         },
       },
     },
