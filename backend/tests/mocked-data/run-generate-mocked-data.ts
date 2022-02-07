@@ -4,7 +4,12 @@ import { Moment } from "moment";
 import * as fs from "fs";
 import { LatLong } from "../interfaces";
 
-const SCOPE = { topLat: 1, bottomLat: 2, leftLong: 3, rightLong: 5 };
+const SCOPE = {
+  topLat: 45.5375488,
+  bottomLat: 45.4977357,
+  leftLong: -122.6964694,
+  rightLong: -122.6062613,
+};
 const NUM_USERS = 10;
 const NUM_LOCS_PER_USER = 6;
 const MAX_NUM_CLOSE_BY_CP_PER_USER = Math.floor(NUM_LOCS_PER_USER / 2);
