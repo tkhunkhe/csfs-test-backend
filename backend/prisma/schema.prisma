@@ -24,7 +24,7 @@ model User {
 model UserLocation {
   id  Int     @id @default(autoincrement())
   userId Int
-  user  User   @relation(fields: [userId], references: [id])
+  user  User   @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   lat Float
   long Float
   createdAt DateTime @default(now())
@@ -43,8 +43,9 @@ model Home {
   cpDists Distance[]
 }
 
-model CheckPoint {
+model Checkpoint {
   id  Int     @id @default(autoincrement())
+  name String?
   lat Float
   long Float
   createdAt DateTime @default(now())
@@ -52,17 +53,17 @@ model CheckPoint {
   homeDists Distance[] // distance to each user'home
 }
 
-// home to checkpoint one-way distance in km
+// home to Checkpoint one-way distance in km
 // many to many, one for each User-CP pair
 model Distance {
   id  Int     @id @default(autoincrement())
   homeId Int
   cpId Int
-  home Home @relation(fields: [homeId], references: [id])
-  cp CheckPoint @relation(fields: [cpId], references: [id])
+  home Home @relation(fields: [homeId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  cp Checkpoint @relation(fields: [cpId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   km Float
-  createdAt DateTime @default(now()) // created when checkpoint or home is created
-  disabledAt DateTime? // not null when user has new home or checkpoint is removed
+  createdAt DateTime @default(now()) // created when Checkpoint or home is created
+  disabledAt DateTime? // not null when user has new home or Checkpoint is removed
   distPoints DistancePoints?
 }
 
@@ -72,7 +73,7 @@ model Distance {
 model DistancePoints { // DP
   id Int @id @default(autoincrement())
   distId Int
-  dist Distance @relation(fields: [distId], references: [id])
+  dist Distance @relation(fields: [distId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   points Int // 1-10
   createdAt DateTime @default(now())
   uLocDPointsHist ULocDPointsHistory[] // a User-CP pair distance can be reached many times
@@ -82,9 +83,9 @@ model DistancePoints { // DP
 model ULocDPointsHistory {
   id Int @id @default(autoincrement())
   uLocId Int
-  uLoc UserLocation @relation(fields: [uLocId], references: [id])
+  uLoc UserLocation @relation(fields: [uLocId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   dPointsId Int
-  dPoints DistancePoints @relation(fields: [dPointsId], references: [id])
+  dPoints DistancePoints @relation(fields: [dPointsId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 }
 
 // one to many ranks
@@ -99,10 +100,10 @@ model RankSet {
 model RankHistory {
   id Int @id @default(autoincrement())
   userId Int
-  user User @relation(fields: [userId], references: [id])
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   rank Int
   totalPoints Int // can be zero if never 
   createdAt DateTime @default(now())
   rankSetId Int
-  rankSet RankSet @relation(fields: [rankSetId], references: [id])
+  rankSet RankSet @relation(fields: [rankSetId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 }
