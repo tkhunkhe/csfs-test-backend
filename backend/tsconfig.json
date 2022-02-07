@@ -1,0 +1,31 @@
+{
+  "compilerOptions": {
+    "target": "es2019",
+    "module": "commonjs",
+    "lib": ["es2019"],
+    "sourceMap": true,
+    "outDir": "./build",
+    // "rootDir": "./src",
+    "rootDirs": ["src", "tests"],
+    /* Strict Type-Checking Options */
+    "strict": false,
+    "noImplicitAny": false,
+    "allowJs": true,
+    /* Module Resolution Options */
+    "moduleResolution": "node",
+    "baseUrl": "./",
+    "paths": {
+      "src/*": ["src/*"]
+      // "tests/*": ["tests/*"]
+    },
+    "esModuleInterop": true,
+    "resolveJsonModule": true,
+    /* Advanced Options */
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "newLine": "LF"
+  },
+  // "include": ["src/**/*"],
+  "include": ["src/**/*", "tests/**/*.ts"],
+  "exclude": ["node_modules", "build"]
+}
