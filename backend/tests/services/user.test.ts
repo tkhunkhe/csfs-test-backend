@@ -5,6 +5,8 @@ const mockedUser = { username: "unittest-test-data" };
 const mockedUserWithAddr = {
   ...mockedUser,
   address: "9901 N Hurst Ave, Portland, OR 97203, United States",
+  lat: 45.594217,
+  long: -122.708774,
 };
 const initUser = async (user) => {
   let createUser = null;
@@ -54,7 +56,7 @@ describe("test create user", () => {
   const m = mockedUserWithAddr;
   let res = null;
   beforeAll(async () => {
-    await userServ.createUser(m.username, m.address);
+    await userServ.createUser(m.username, m.address, m.lat, m.long);
   });
   afterAll(async () => {
     await clearUser();
@@ -73,13 +75,19 @@ describe("test create user", () => {
         homes: {
           select: {
             address: true,
+            lat: true,
+            long: true,
           },
         },
       },
     });
-    expect(res).not.toBeNull();
+    expect(res).toBeDefined();
     expect(res).toHaveLength(1);
     expect(res[0].username).toBe(m.username);
-    expect(res[0].homes).toContainEqual({ address: m.address });
+    expect(res[0].homes).toContainEqual({
+      address: m.address,
+      lat: m.lat,
+      long: m.long,
+    });
   });
 });
