@@ -15,10 +15,13 @@ model User {
   username String  @unique
   createdAt DateTime @default(now())
   locations UserLocation[]
-  homes Home[]// a user can change an address, 
+  address String
+  lat Float? // allow adding address without knowning the lat-long, but when queried for ranking these should be auto-populated
+  long Float? // same rule as lat
   // the new address will be used to calculate the new CP points. 
   // The old points still use the old address.
   rankHists RankHistory[]
+  cpDists Distance[]
 }
 
 model UserLocation {
@@ -31,18 +34,6 @@ model UserLocation {
   uLocDPointsHist ULocDPointsHistory? // a location can match only 1 CP
 }
 
-// A user can only have one home but their old points with old home should not be recalculated based on the new home
-model Home {
-  id  Int     @id @default(autoincrement())
-  userId Int
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  address String
-  lat Float? // allow adding address without knowning the lat-long, but when queried for ranking these should be auto-populated
-  long Float? // same rule as lat
-  createdAt DateTime @default(now())
-  cpDists Distance[]
-}
-
 model Checkpoint {
   id  Int     @id @default(autoincrement())
   name String?
@@ -50,21 +41,30 @@ model Checkpoint {
   long Float
   createdAt DateTime @default(now())
   removedAt DateTime?
-  homeDists Distance[] // distance to each user'home
+  userDists Distance[] // distance to each userHome
 }
 
-// home to Checkpoint one-way distance in km
+// userHome to Checkpoint one-way distance in km
 // many to many, one for each User-CP pair
 model Distance {
   id  Int     @id @default(autoincrement())
-  homeId Int
+  userId Int
   cpId Int
-  home Home @relation(fields: [homeId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   cp Checkpoint @relation(fields: [cpId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   km Float
-  createdAt DateTime @default(now()) // created when Checkpoint or home is created
-  disabledAt DateTime? // not null when user has new home or Checkpoint is removed
+  createdAt DateTime @default(now()) // created when Checkpoint or user is created
+  disabledAt DateTime? // not null when Checkpoint or User is removed
   distPoints DistancePoints?
+}
+
+// distance between a cp to a userHome could be the same 
+// but the point could change for that userHome over time 
+// if there are more cp added
+model DistancePointsSet {
+  id Int @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  distPoints DistancePoints[]
 }
 
 // points for each User-CP pair distance
@@ -72,10 +72,11 @@ model Distance {
 // in order to create a fair game
 model DistancePoints { // DP
   id Int @id @default(autoincrement())
+  distPointsSetId Int
+  distPointsSet DistancePointsSet @relation(fields: [distPointsSetId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   distId Int
   dist Distance @relation(fields: [distId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   points Int // 1-10
-  createdAt DateTime @default(now())
   uLocDPointsHist ULocDPointsHistory[] // a User-CP pair distance can be reached many times
 }
 

@@ -76,32 +76,23 @@ const getRandomBetweenScope = () => {
   );
 };
 
-const generateUser = () => {
-  const results = [];
-  for (let i = 1; i <= NUM_USERS; i++) {
-    results.push({
-      userId: i,
-      username: `User ${i}`,
-      createdAt: moment(ADD_Users_TIME),
-    });
-  }
-  return results;
-};
-
 /**
  * userId,lat,long,createdAt
  */
-const generateUserHomes = (): {
-  userId: number;
+const generateUsers = (): {
+  id: number;
+  username: string;
   lat: number;
   long: number;
+  address: string;
   createdAt: Moment;
 }[] => {
   const results = [];
   for (let i = 1; i <= NUM_USERS; i++) {
     let latlong = getRandomBetweenScope();
     results.push({
-      userId: i,
+      id: i,
+      username: `User ${i}`,
       address: `mocked addresss ${i}`,
       lat: latlong.lat,
       long: latlong.long,
@@ -152,16 +143,7 @@ const generate = (): {
   checkpoints: any[];
   userLocs: any[];
 } => {
-  const usersNoHomes = generateUser();
-  const userHomes = generateUserHomes();
-  const idToHomes = userHomes.reduce((acc, item) => {
-    const { userId, ...rest } = item;
-    return { ...acc, [userId]: [rest] };
-  }, {});
-  const users = usersNoHomes.map((user) => ({
-    ...user,
-    homes: idToHomes[user.userId],
-  }));
+  const users = generateUsers();
   return {
     users,
     checkpoints: getCheckpointsWithCreatedAt(),

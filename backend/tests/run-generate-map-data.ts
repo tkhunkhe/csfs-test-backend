@@ -6,12 +6,12 @@ import csv from "csv-parser";
 
 let results = {
   checkpoints: [],
-  userHomes: [],
+  users: [],
   userLocations: [],
 };
 const fileNameToResKey = {
   checkpoints: "checkpoints",
-  "user-homes": "userHomes",
+  users: "users",
   "user-locations": "userLocations",
 };
 const baseURI = "tests/mocked-data/starter-data";

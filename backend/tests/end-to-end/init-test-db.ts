@@ -42,16 +42,7 @@ const clearDB = async () => {
 
 const initUsers = async (users: any[]) => {
   const promises = users.map((user) => {
-    const homes = user.homes;
-    const home = homes[0];
-    return userServ.createUser(
-      user.username,
-      home.address,
-      home.lat,
-      home.long,
-      user.userId,
-      user.createdAt
-    );
+    return userServ.createUser(user);
   });
   return await Promise.all(promises);
 };

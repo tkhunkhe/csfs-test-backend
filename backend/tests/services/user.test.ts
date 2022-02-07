@@ -6,26 +6,17 @@ const mockedUser = mUserHelp.user;
 const mockedUserWithAddr = mUserHelp.userWithAddr;
 export const initUser = async (user) => {
   let createUser = null;
-  let data = user;
-  if (user.address && !user.homes) {
-    const { username, ...rest } = user;
-    data = { username, homes: { create: [rest] } };
-  } else if (user.homes) {
-    const { homes, ...rest } = user;
-    data = { ...rest, homes: { create: homes } };
-  }
   try {
     createUser = await prisma.user.create({
-      data,
+      data: user,
     });
-    console.debug(`createUser:`, createUser);
-    return createUser.id;
   } catch (err) {
     console.error(err);
     createUser = await prisma.user.findUnique({
       where: { username: user.username },
     });
   }
+  // console.debug(`createUser:`, createUser);
   return createUser.id;
 };
 
@@ -34,7 +25,7 @@ export const clearUser = async () => {
     const removeUser = await prisma.user.delete({
       where: mockedUser,
     });
-    console.debug(`removeUser:`, removeUser);
+    // console.debug(`removeUser:`, removeUser);
   } catch (err) {
     console.error(err);
   }
@@ -45,14 +36,14 @@ describe("test get user", () => {
   let res = null;
   beforeAll(async () => {
     await clearUser();
-    userId = await initUser(mockedUser);
+    userId = await initUser(mockedUserWithAddr);
     res = await userServ.getUser(userId);
   });
   afterAll(async () => {
     await clearUser();
   });
   it("should find user", async () => {
-    expect(res).toMatchObject(mockedUser);
+    expect(res).toMatchObject(mockedUserWithAddr);
   });
 });
 
@@ -60,7 +51,7 @@ describe("test create user", () => {
   const m = mockedUserWithAddr;
   let res = null;
   beforeAll(async () => {
-    await userServ.createUser(m.username, m.address, m.lat, m.long);
+    await userServ.createUser(m);
   });
   afterAll(async () => {
     await clearUser();
@@ -69,29 +60,11 @@ describe("test create user", () => {
     res = await prisma.user.findMany({
       where: {
         username: m.username,
-        homes: {
-          some: {
-            address: m.address,
-          },
-        },
-      },
-      include: {
-        homes: {
-          select: {
-            address: true,
-            lat: true,
-            long: true,
-          },
-        },
+        address: m.address,
       },
     });
     expect(res).toBeDefined();
     expect(res).toHaveLength(1);
-    expect(res[0].username).toBe(m.username);
-    expect(res[0].homes).toContainEqual({
-      address: m.address,
-      lat: m.lat,
-      long: m.long,
-    });
+    expect(res[0]).toMatchObject(m);
   });
 });
