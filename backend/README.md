@@ -6,6 +6,7 @@
 
 ```
 DATABASE_URL=<database url>
+MAPQUEST_KEY=<mapquest key obtained from https://developer.mapquest.com/>
 ```
 
 ## Run
