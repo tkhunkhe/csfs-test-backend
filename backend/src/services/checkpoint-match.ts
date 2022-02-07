@@ -1,5 +1,6 @@
-const clostByKMThreshold = 0.25; // km
-const acceptableKMOff = 0.02; // km(2m)
+import { LatLong } from "../interfaces";
+export const clostByKMThreshold = 0.25; // km
+export const acceptableKMOff = 0.02; // km(2m)
 /**
  * find distance between two locations in km
  * formula source: https://medium.com/analytics-vidhya/finding-nearest-pair-of-latitude-and-longitude-match-using-python-ce50d62af546
