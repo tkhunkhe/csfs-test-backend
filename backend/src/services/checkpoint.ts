@@ -14,6 +14,15 @@ const createCheckpoints = async (
   });
 };
 
+const getAllCurrentCheckpoints = async () => {
+  return prisma.checkpoint.findMany({
+    where: {
+      removedAt: null,
+    },
+  });
+};
+
 export default {
   createCheckpoints,
+  getAllCurrentCheckpoints,
 };
