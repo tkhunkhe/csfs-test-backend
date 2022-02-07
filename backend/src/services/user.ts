@@ -4,11 +4,15 @@ const createUser = async (
   username: string,
   homeAddress: string,
   lat?: number,
-  long?: number
+  long?: number,
+  userId?: number,
+  createdAt?: any
 ) => {
   return prisma.user.create({
     data: {
+      id: userId,
       username,
+      createdAt,
       homes: {
         create: [{ address: homeAddress, lat, long }],
       },
