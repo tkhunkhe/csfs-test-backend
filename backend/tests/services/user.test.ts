@@ -1,31 +1,35 @@
 import prisma from "../../src/connectors/prisma-client";
 import userServ from "../../src/services/user";
+import mUserHelp from "../mocked-data/user";
 
-const mockedUser = { username: "unittest-test-data" };
-const mockedUserWithAddr = {
-  ...mockedUser,
-  address: "9901 N Hurst Ave, Portland, OR 97203, United States",
-  lat: 45.594217,
-  long: -122.708774,
-};
-const initUser = async (user) => {
+const mockedUser = mUserHelp.user;
+const mockedUserWithAddr = mUserHelp.userWithAddr;
+export const initUser = async (user) => {
   let createUser = null;
+  let data = user;
+  if (user.address && !user.homes) {
+    const { username, ...rest } = user;
+    data = { username, homes: { create: [rest] } };
+  } else if (user.homes) {
+    const { homes, ...rest } = user;
+    data = { ...rest, homes: { create: homes } };
+  }
   try {
     createUser = await prisma.user.create({
-      data: user,
+      data,
     });
     console.debug(`createUser:`, createUser);
     return createUser.id;
   } catch (err) {
     console.error(err);
     createUser = await prisma.user.findUnique({
-      where: user,
+      where: { username: user.username },
     });
   }
   return createUser.id;
 };
 
-const clearUser = async () => {
+export const clearUser = async () => {
   try {
     const removeUser = await prisma.user.delete({
       where: mockedUser,
