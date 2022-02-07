@@ -1,11 +1,16 @@
 import prisma from "../connectors/prisma-client";
 
-const createUser = async (username: string, homeAddress: string) => {
+const createUser = async (
+  username: string,
+  homeAddress: string,
+  lat?: number,
+  long?: number
+) => {
   return prisma.user.create({
     data: {
       username,
       homes: {
-        create: [{ address: homeAddress }],
+        create: [{ address: homeAddress, lat, long }],
       },
     },
   });
