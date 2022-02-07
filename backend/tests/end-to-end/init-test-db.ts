@@ -6,6 +6,7 @@ import checkpointServ from "../../src/services/checkpoint";
 import distanceServ from "../../src/services/distance";
 import prisma from "../../src/connectors/prisma-client";
 import { Prisma } from "@prisma/client";
+import pointsServ from "../../src/services/points";
 
 const clearDB = async () => {
   const execute = async (prepQueries) => {
@@ -60,8 +61,12 @@ const initCheckpoints = async (checkpoints: any[]) => {
   return await checkpointServ.createCheckpoints(checkpoints);
 };
 
-const initDistances = async () => {
+const calDistances = async () => {
   return await distanceServ.calculateAndStoreCurrentDistances();
+};
+
+const calPoints = async () => {
+  return await pointsServ.calculateAndStorePointsForAllUsers();
 };
 
 const main = async () => {
@@ -71,7 +76,8 @@ const main = async () => {
   await initUsers(mocked.users);
   await initUserLocations(mocked.userLocs);
   await initCheckpoints(mocked.checkpoints);
-  await initDistances();
+  await calDistances();
+  await calPoints();
 };
 
 export default main;
