@@ -28,8 +28,29 @@ const getUserLatestHome = async (userId: number) => {
   return user.homes?.length ? user.homes[0] : null;
 };
 
+const getAllUsersLatestHomes = async () => {
+  const allUsers = await prisma.user.findMany({
+    include: {
+      homes: {
+        orderBy: {
+          id: "desc",
+        },
+        take: 1,
+      },
+    },
+  });
+  return allUsers
+    .map((user) => {
+      if (user.homes.length) {
+        return { userId: user.id, ...user.homes[0] };
+      }
+    })
+    .filter((home) => !!home);
+};
+
 export default {
   changeHome,
   getUserHomes,
   getUserLatestHome,
+  getAllUsersLatestHomes,
 };
