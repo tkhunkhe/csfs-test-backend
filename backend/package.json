@@ -9,7 +9,7 @@
     "serve": "node build/server.js",
     "test": "jest tests/",
     "generate-mocked-data": "npx ts-node tests/mocked-data/run-generate-mocked-data.ts",
-    "init-test-db": "npx ts-node tests/mocked-data/run-init-test-db.ts",
+    "init-test-db": "npx ts-node tests/end-to-end/run-init-test-db.ts",
     "prisma:migrate-init": "npx prisma migrate dev --name \"init\" --preview-feature"
   },
   "repository": {
