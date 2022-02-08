@@ -1,6 +1,6 @@
 import prisma from "../connectors/prisma-client";
 
-const createLocations = async (
+const createLocations = (
   locs: {
     id?: number;
     createdAt?: any;
@@ -14,6 +14,19 @@ const createLocations = async (
   });
 };
 
+const getAllUsersLocations = () => {
+  return prisma.userLocation.findMany({
+    select: {
+      id: true,
+      createdAt: true,
+      userId: true,
+      lat: true,
+      long: true,
+    },
+  });
+};
+
 export default {
   createLocations,
+  getAllUsersLocations,
 };

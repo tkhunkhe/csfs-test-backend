@@ -27,7 +27,12 @@ export const clearUser = async () => {
     });
     // console.debug(`removeUser:`, removeUser);
   } catch (err) {
-    console.error(err);
+    if (err.code == "P2025") {
+      // cause 'Record to delete does not exist.'
+      console.debug(err.meta);
+    } else {
+      console.error(err);
+    }
   }
 };
 

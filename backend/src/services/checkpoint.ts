@@ -1,6 +1,6 @@
 import prisma from "../connectors/prisma-client";
 
-const createCheckpoints = async (
+const createCheckpoints = (
   checkpoints: {
     id?: number;
     createdAt?: any;
@@ -14,7 +14,7 @@ const createCheckpoints = async (
   });
 };
 
-const getAllCurrentCheckpoints = async () => {
+const getAllCurrentCheckpoints = () => {
   return prisma.checkpoint.findMany({
     where: {
       removedAt: null,
@@ -22,7 +22,22 @@ const getAllCurrentCheckpoints = async () => {
   });
 };
 
+const getAllCheckpointsHistory = () => {
+  return prisma.checkpoint.findMany({
+    // TODO: consider removedAt in the future
+    select: { id: true, lat: true, long: true, createdAt: true },
+  });
+};
+
+/**
+ * calculate dist to all user homes
+ * then calculate dist points for all existing dist (rebucketize)
+ * // TODO:
+ */
+const onCheckpointAdded = () => {};
+
 export default {
   createCheckpoints,
   getAllCurrentCheckpoints,
+  getAllCheckpointsHistory,
 };

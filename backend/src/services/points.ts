@@ -31,7 +31,6 @@ const storePointsSet = (pointsSet) => {
 };
 
 /**
- *
  * @param debug include cpId, km if debug = True
  * @returns
  */
@@ -81,7 +80,36 @@ const calculateAndStorePointsForAllUsers = async () => {
   });
 };
 
+/**
+ * how many points each user can earn for reaching each checkpoint
+ * all pre calculated points, not the user's points
+ * @returns
+ */
+const getAllPointsForAllUsers = () => {
+  return prisma.distancePoints.findMany({
+    select: {
+      id: true,
+      dist: {
+        select: {
+          id: true,
+          // km: true,
+          distPoints: true,
+          cpId: true,
+          userId: true,
+        },
+      },
+      distPointsSet: {
+        select: {
+          id: true,
+          createdAt: true,
+        },
+      },
+    },
+  });
+};
+
 export default {
   calculatePointsForAllUsers,
   calculateAndStorePointsForAllUsers,
+  getAllPointsForAllUsers,
 };
