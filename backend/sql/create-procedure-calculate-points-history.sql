@@ -3,7 +3,7 @@ DELIMITER $$
 DROP PROCEDURE IF Exists calculatePointsHistory $$
 CREATE PROCEDURE calculatePointsHistory()
 BEGIN
-INSERT INTO ULocDPointsHistory(uLocId, dPointsId)
+INSERT IGNORE INTO ULocDPointsHistory(uLocId, dPointsId)
 SELECT uLocId, dpId FROM (
 	with cpMatched as (
 SELECT
