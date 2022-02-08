@@ -10,6 +10,6 @@ router.get("/", (_, res) =>
     .status(200)
     .send("Welcome to Chainstarts Full-stack Test App ** Backend **")
 );
-router.use("dashboard", dashboard);
+router.use("/dashboard", dashboard);
 
 export default router;

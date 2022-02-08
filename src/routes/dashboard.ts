@@ -5,5 +5,5 @@ const router = express.Router();
 /**
  *TODO: add header authorization check in the future
  */
-router.get("/ranks", (req: Request, res: Response) => rankController.getRanks);
+router.get("/ranks", rankController.getRanks);
 export default router;
