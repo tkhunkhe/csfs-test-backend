@@ -9,11 +9,27 @@ DATABASE_URL=<database url>
 MAPQUEST_KEY=<mapquest key obtained from https://developer.mapquest.com/>
 ```
 
+- `npm install`
+- start mysql server
+- initialize database
+  - `npm run prisma:migrate-init`
+  - run [create-function-procedures.sql](sql/create-function-procedures.sql) script
+- add mocked data
+  - `npm run generate-mocked-data`
+  - `npm run init-test-db`
+  - `npm run init-function-procedure`
+
 ## Run
 
 ### dev
 
 - `npm run start`
+
+### test
+
+- `npm run test`
+- run specific test
+  - ` npm run test -- -t '<wanted test name in describe>'`
 
 ### build
 
