@@ -27,5 +27,6 @@
   },
   // "include": ["src/**/*"],
   "include": ["src/**/*", "tests/**/*.ts"],
-  "exclude": ["node_modules", "build"]
+  "exclude": ["node_modules", "build"],
+  "files": ["global.d.ts"]
 }

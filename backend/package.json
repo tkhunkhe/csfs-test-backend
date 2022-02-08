@@ -10,6 +10,7 @@
     "test": "jest tests/",
     "generate-mocked-data": "npx ts-node tests/mocked-data/run-generate-mocked-data.ts",
     "init-test-db": "npx ts-node tests/end-to-end/run-init-test-db.ts",
+    "init-function-procedure": "npx ts-node tests/end-to-end/run-init-function-procedure.ts",
     "prisma:migrate-init": "npx prisma migrate dev --name \"init\" --preview-feature"
   },
   "repository": {
@@ -29,6 +30,7 @@
     "csv-parser": "^3.0.0",
     "fs": "^0.0.1-security",
     "jest": "^27.5.0",
+    "jest-extended": "^2.0.0",
     "nodemon": "^2.0.15",
     "prisma": "^3.8.1",
     "ts-jest": "^27.1.3",
