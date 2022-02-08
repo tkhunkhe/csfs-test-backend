@@ -93,7 +93,7 @@ model ULocDPointsHistory {
 // when query ranks for dashboard, just query the latest rank set
 model RankSet {
   id Int @id @default(autoincrement())
-  createdAt DateTime @default(now())
+  createdAt DateTime @default(now()) @unique
   rankHists RankHistory[]
 }
 // total points and rank each time there is a new UserDPHistory
@@ -104,7 +104,8 @@ model RankHistory {
   user User @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   rank Int
   totalPoints Int // can be zero if never 
-  createdAt DateTime @default(now())
+  // createdAt DateTime @default(now())
   rankSetId Int
   rankSet RankSet @relation(fields: [rankSetId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  @@unique([rankSetId,userId])
 }
