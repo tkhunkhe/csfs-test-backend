@@ -1,0 +1,6 @@
+node_modules
+build
+.env
+prisma/migrations
+tests/mocked-data/starter-data/*.csv
+.DS_Store
