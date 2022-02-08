@@ -1,5 +1,6 @@
 Use csfs_test;
 DELIMITER $$
+DROP FUNCTION IF EXISTS getDistance$$
 CREATE FUNCTION getDistance(lat1 float, lng1 float, lat2 float, lng2 float)
 RETURNS float DETERMINISTIC
 BEGIN
