@@ -72,4 +72,4 @@ where
 	rn = 1) select * from results) alias;
 END$$;
 DELIMITER ;
-CALL calculatePointsHistory();
+-- CALL calculatePointsHistory();
