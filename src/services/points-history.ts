@@ -19,6 +19,38 @@ const callCalculateAllHistory = async () => {
   await callCalculatePointsHistory();
   await callCalculatePastPointsAndRank();
 };
+
+const getAllPointsHistoryForUser = (userId: number) => {
+  return prisma.uLocDPointsHistory.findMany({
+    where: {
+      uLoc: {
+        userId,
+      },
+    },
+    include: {
+      dPoints: {
+        select: {
+          points: true,
+          dist: {
+            select: {
+              km: true,
+              cpId: true,
+            },
+          },
+        },
+      },
+      uLoc: {
+        select: {
+          userId: true,
+          lat: true,
+          long: true,
+          createdAt: true,
+        },
+      },
+    },
+  });
+};
+
 /**
  * this is for going forward
  * check if nearby any checkpoints and log the points
@@ -34,4 +66,5 @@ export default {
   onUserLocationAdded,
   callCalculatePastPointsAndRank,
   callCalculateAllHistory,
+  getAllPointsHistoryForUser,
 };

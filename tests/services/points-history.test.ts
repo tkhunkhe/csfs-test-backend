@@ -19,3 +19,15 @@ describe("test callCalculatePastPointsAndRank", () => {
     expect(res).toBeDefined();
   });
 });
+
+describe("test getAllPointsHistoryForUser", () => {
+  let res;
+  const userId = 7;
+  beforeAll(async () => {
+    res = await pointsHistory.getAllPointsHistoryForUser(userId);
+  });
+  it("should exists", () => {
+    console.debug(JSON.stringify(res));
+    expect(res).toBeDefined();
+  });
+});
