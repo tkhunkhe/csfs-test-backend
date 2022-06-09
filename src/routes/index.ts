@@ -10,7 +10,7 @@ router.use(jsonParser);
 router.get("/", (_, res) =>
   res
     .status(200)
-    .send("Welcome to Chainstarts Full-stack Test App ** Backend **")
+    .send("Welcome to Full-stack Test App ** Backend **")
 );
 router.use("/dashboard", dashboard);
 

@@ -7,7 +7,7 @@ const port = 4000;
 const server = app.listen(port, () => {
   app.use(router);
   console.log(
-    `Checkpoints Tracking app (Chainstarters full-stack test) is running on port ${port}.`
+    `Checkpoints Tracking app (full-stack test) is running on port ${port}.`
   );
 });
 

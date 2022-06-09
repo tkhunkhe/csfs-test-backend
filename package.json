@@ -1,7 +1,7 @@
 {
   "name": "backend",
   "version": "1.0.0",
-  "description": "checkpoints admin dashboard web app for Chainstarts full-stack test",
+  "description": "checkpoints admin dashboard web app for full-stack test",
   "main": "server.js",
   "scripts": {
     "start": "nodemon src/server.ts",

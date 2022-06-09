@@ -1,4 +1,4 @@
-# Chainstarts Full-stack Test App: Backend
+# Full-stack Test App: Backend
 
 ## Setup after clone
 
